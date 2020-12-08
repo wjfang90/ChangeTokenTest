@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.FileProviders.Physical;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -42,9 +43,13 @@ namespace ChangeTokenTest
 
             if (fileContent != null)
             {
-                // Obtain a change token from the file provider whose
-                // callback is triggered when the file is modified.
+                // Obtain a change token from the file provider whose callback is triggered when the file is modified.
                 var changeToken = _fileProvider.Watch(fileName);
+
+                //PollingFileChangeToken是IChangeToken的实现类，通过轮询监控文件变化,Polling occurs every 4 seconds.
+                //This change token does not raise any change callbacks. Callers should watch for HasChanged to turn from false to true and dispose the token after this happens.
+                //var fileInfo = new FileInfo(filePath);
+                //var changeToken = new PollingFileChangeToken(fileInfo);
 
                 // Configure the cache entry options for a five minute
                 // sliding expiration and use the change token to
